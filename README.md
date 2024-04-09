@@ -55,7 +55,7 @@ See [LICENSE](LICENSE) for more information.
 
 1. Clone DUSt3R.
 ```bash
-git clone --recursive https://github.com/naver/dust3r
+git clone --recursive git@github.com:zixunh/dust3r.git
 cd dust3r
 # if you have already cloned dust3r:
 # git submodule update --init --recursive
