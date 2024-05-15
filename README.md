@@ -113,7 +113,7 @@ When the global alignment ends, the reconstruction appears.
 Use the slider "min_conf_thr" to show or remove low confidence areas.
 
 ```bash
-python3 demo.py --weights checkpoints/DUSt3R_ViTLarge_BaseDecoder_512_dpt.pth
+python3 demo.py --weights checkpoints/DUSt3R_ViTLarge_BaseDecoder_512_dpt.pth --tmp_dir /home/msc_lab/zxh/tmp/
 
 # Use --image_size to select the correct resolution for your checkpoint. 512 (default) or 224
 # Use --local_network to make it accessible on the local network, or --server_name to specify the url manually

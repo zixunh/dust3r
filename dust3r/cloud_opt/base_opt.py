@@ -66,6 +66,7 @@ class BasePCOptimizer (nn.Module):
         # input data
         pred1_pts = pred1['pts3d']
         pred2_pts = pred2['pts3d_in_other_view']
+        print(pred1_pts.shape, pred2_pts.shape, self.str_edges)
         self.pred_i = NoGradParamDict({ij: pred1_pts[n] for n, ij in enumerate(self.str_edges)})
         self.pred_j = NoGradParamDict({ij: pred2_pts[n] for n, ij in enumerate(self.str_edges)})
         self.imshapes = get_imshapes(self.edges, pred1_pts, pred2_pts)

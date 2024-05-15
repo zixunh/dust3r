@@ -78,6 +78,7 @@ class ModularPointCloudOptimizer (BasePCOptimizer):
         elif isinstance(msk, (tuple, list)):
             return self._get_msk_indices(np.array(msk))
         elif msk.dtype in (bool, torch.bool, np.bool_):
+            print(len(msk), self.n_imgs)
             assert len(msk) == self.n_imgs
             return np.where(msk)[0]
         elif np.issubdtype(msk.dtype, np.integer):
