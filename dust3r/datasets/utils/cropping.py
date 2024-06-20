@@ -69,7 +69,7 @@ def rescale_image_depthmap(image, depthmap, camera_intrinsics, output_resolution
     # first rescale the image so that it contains the crop
     image = image.resize(output_resolution, resample=lanczos)
     if depthmap is not None:
-        depthmap = cv2.resize(depthmap, output_resolution, fx=scale_final,
+        depthmap = cv2.resize(depthmap, tuple(output_resolution), fx=scale_final, \
                               fy=scale_final, interpolation=cv2.INTER_NEAREST)
 
     # no offset here; simple rescaling

@@ -1,11 +1,6 @@
 # Copyright (C) 2024-present Naver Corporation. All rights reserved.
 # Licensed under CC BY-NC-SA 4.0 (non-commercial use only).
-#
-# --------------------------------------------------------
-# Dataloader for preprocessed Co3d_v2
-# dataset at https://github.com/facebookresearch/co3d - Creative Commons Attribution-NonCommercial 4.0 International
-# See datasets_preprocess/preprocess_co3d.py
-# --------------------------------------------------------
+
 import os
 import os.path as osp
 import json
@@ -16,8 +11,8 @@ import cv2
 import numpy as np
 
 from dust3r.datasets.base.base_stereo_view_dataset import BaseStereoViewDataset
-from dust3r.utils.image import imread_cv2, imread_PIL
-from vis_utils import *
+from dust3r.utils.image import imread_cv2
+# from vis_utils import *
 import pandas as pd
 
 
@@ -30,12 +25,7 @@ class ShapeNet(BaseStereoViewDataset):
 
         self.load_split_file()
         self.load_scene()
-        # load all scenes
-        # with open(osp.join(self.ROOT, f'selected_seqs_{self.split}.json'), 'r') as f:
-        #     self.scenes = json.load(f)
-        #     self.scenes = {k: v for k, v in self.scenes.items() if len(v) > 0}
-        #     self.scenes = {(k, k2): v2 for k, v in self.scenes.items()
-        #                    for k2, v2 in v.items()}
+
         scene_list = []
         for k, v in self.scenes.items():
             for obj in v:
@@ -48,8 +38,6 @@ class ShapeNet(BaseStereoViewDataset):
                              for i, j in itertools.combinations(range(100), 2)
                              if abs(i-j) % 5 == 0]
 
-        # self.invalidate = {scene: {} for scene in self.scene_list}
-
     def __len__(self):
         return len(self.scene_list) * len(self.combinations)
 
@@ -61,9 +49,6 @@ class ShapeNet(BaseStereoViewDataset):
 
         # add a bit of randomness
         last = len(image_pool)-1
-
-        # if resolution not in self.invalidate[obj, instance]:  # flag invalid images
-        #     self.invalidate[obj, instance][resolution] = [False for _ in range(len(image_pool))]
 
         # decide now if we mask the bg
         mask_bg = (self.mask_bg == True) or (self.mask_bg == 'rand' and rng.choice(2))
@@ -79,17 +64,15 @@ class ShapeNet(BaseStereoViewDataset):
             impath = osp.join(self.ROOT, obj, instance, 'rgb', f'{view_idx:04n}.png')
 
             # load camera params
-            # input_metadata = np.load(impath.replace('jpg', 'npz'))
             pose_path = osp.join(self.ROOT, obj, instance, 'pose', f'{view_idx:04n}.txt')
             camera_pose = np.loadtxt(pose_path).astype(np.float32)
-            # camera_pose = input_metadata['camera_pose'].astype(np.float32)
             intr_path = osp.join(self.ROOT, obj, instance, 'intrinsics.npy')
             intrinsics = np.load(intr_path).astype(np.float32)
 
             # load image and depth
-            rgb_image = imread_PIL(impath)
+            rgb_image = imread_cv2(impath)
             depthpath = osp.join(self.ROOT, obj, instance, 'depth', f'{view_idx:04n}.exr')
-            depthmap = imread_cv2(depthpath, cv2.IMREAD_UNCHANGED)
+            depthmap = cv2.imread(depthpath, cv2.IMREAD_UNCHANGED)[:, :, 0]
             maskmap = (depthmap < 10000).astype(np.uint8)
             depthmap = (depthmap.astype(np.float32) / 65535) * np.nan_to_num(65535)
 
@@ -100,14 +83,6 @@ class ShapeNet(BaseStereoViewDataset):
 
             rgb_image, depthmap, intrinsics = self._crop_resize_if_necessary(
                 rgb_image, depthmap, intrinsics, resolution, rng=rng, info=impath)
-
-            # Currently every depthmap is good
-            # num_valid = (depthmap > 0.0).sum()
-            # if num_valid == 0:
-            #     # problem, invalidate image and retry
-            #     self.invalidate[obj, instance][resolution][im_idx] = True
-            #     imgs_idxs.append(im_idx)
-            #     continue
 
             views.append(dict(
                 img=rgb_image,
@@ -163,7 +138,7 @@ if __name__ == "__main__":
     from dust3r.viz import SceneViz, auto_cam_size
     from dust3r.utils.image import rgb
 
-    dataset = Co3d(split='train', ROOT="data/co3d_subset_processed", resolution=224, aug_crop=16)
+    dataset = ShapeNet(split='train', ROOT='data/ShapeNet/ShapeNetRendering', resolution=224, aug_crop=0)
 
     for idx in np.random.permutation(len(dataset)):
         views = dataset[idx]

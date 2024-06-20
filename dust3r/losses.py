@@ -189,7 +189,7 @@ class Regr3D (Criterion, MultiLoss):
         l2 = self.criterion(pred_pts2[mask2], gt_pts2[mask2])
         self_name = type(self).__name__
         details = {self_name+'_pts3d_1': float(l1.mean()), self_name+'_pts3d_2': float(l2.mean())}
-        return Sum((l1, mask1), (l2, mask2)), (details | monitoring)
+        return Sum((l1, mask1), (l2, mask2)), (details.items() | monitoring.items())
 
 
 class ConfLoss (MultiLoss):
@@ -218,6 +218,7 @@ class ConfLoss (MultiLoss):
     def compute_loss(self, gt1, gt2, pred1, pred2, **kw):
         # compute per-pixel loss
         ((loss1, msk1), (loss2, msk2)), details = self.pixel_loss(gt1, gt2, pred1, pred2, **kw)
+        details = dict(details)
         if loss1.numel() == 0:
             print('NO VALID POINTS in img1', force=True)
         if loss2.numel() == 0:

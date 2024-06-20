@@ -18,6 +18,10 @@ try:
 except ImportError:
     print('/!\\ module trimesh is not installed, cannot visualize results /!\\')
 
+import os
+import platform
+if platform.system() == "Linux":
+    os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 def cat_3d(vecs):
     if isinstance(vecs, (np.ndarray, torch.Tensor)):
@@ -153,6 +157,10 @@ class SceneViz:
 
     def show(self, point_size=2):
         self.scene.show(line_settings={'point_size': point_size})
+
+    def rend(self, file_name):
+        import pyrender
+        r = pyrender.OffscreenRenderer(224, 224)
 
 
 def show_raw_pointcloud_with_cams(imgs, pts3d, mask, focals, cams2world,

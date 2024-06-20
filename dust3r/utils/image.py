@@ -22,6 +22,8 @@ except ImportError:
 
 ImgNorm = tvf.Compose([tvf.ToTensor(), tvf.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
+from PIL import Image 
+import cv2
 
 def imread_cv2(path, options=cv2.IMREAD_COLOR):
     """ Open an image or a depthmap with opencv-python.

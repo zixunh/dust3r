@@ -14,6 +14,10 @@ from collections import deque
 import cv2
 import numpy as np
 
+if __name__ == "__main__":
+    import sys
+    sys.path.append('/home/msc_lab/zxh/sema-corr/dust3r/')
+
 from dust3r.datasets.base.base_stereo_view_dataset import BaseStereoViewDataset
 from dust3r.utils.image import imread_cv2
 
@@ -124,7 +128,7 @@ if __name__ == "__main__":
     from dust3r.viz import SceneViz, auto_cam_size
     from dust3r.utils.image import rgb
 
-    dataset = Co3d(split='train', ROOT="data/co3d_subset_processed", resolution=224, aug_crop=16)
+    dataset = Co3d(split='train', ROOT="data/co3dv2_subset_processed", resolution=224, aug_crop=16)
 
     for idx in np.random.permutation(len(dataset)):
         views = dataset[idx]
@@ -143,4 +147,5 @@ if __name__ == "__main__":
                            color=(idx*255, (1 - idx)*255, 0),
                            image=colors,
                            cam_size=cam_size)
-        viz.show()
+        # viz.show()
+        viz.rend(view_name(views[0]))
