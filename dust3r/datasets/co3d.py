@@ -133,7 +133,6 @@ if __name__ == "__main__":
     for idx in np.random.permutation(len(dataset)):
         views = dataset[idx]
         assert len(views) == 2
-        print(view_name(views[0]), view_name(views[1]))
         viz = SceneViz()
         poses = [views[view_idx]['camera_pose'] for view_idx in [0, 1]]
         cam_size = max(auto_cam_size(poses), 0.001)
