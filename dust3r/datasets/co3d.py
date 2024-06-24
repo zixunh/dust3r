@@ -16,7 +16,7 @@ import numpy as np
 
 if __name__ == "__main__":
     import sys
-    sys.path.append('/home/msc_lab/zxh/sema-corr/dust3r/')
+    sys.path.append('/Users/zixunhuang/Documents/sema-corr/dust3r')
 
 from dust3r.datasets.base.base_stereo_view_dataset import BaseStereoViewDataset
 from dust3r.utils.image import imread_cv2
@@ -147,5 +147,7 @@ if __name__ == "__main__":
                            color=(idx*255, (1 - idx)*255, 0),
                            image=colors,
                            cam_size=cam_size)
-        # viz.show()
-        viz.rend(view_name(views[0]))
+        viz.show()
+        # # viz.rend(file_name='test.png')
+        # viz.web_show()
+        # break
