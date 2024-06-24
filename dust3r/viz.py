@@ -20,6 +20,9 @@ except ImportError:
 
 import os
 import platform
+import pyrender
+from scipy.spatial.transform import Rotation as R
+
 if platform.system() == "Linux":
     os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
@@ -158,9 +161,74 @@ class SceneViz:
     def show(self, point_size=2):
         self.scene.show(line_settings={'point_size': point_size})
 
-    def rend(self, file_name):
-        import pyrender
-        r = pyrender.OffscreenRenderer(224, 224)
+    # def rend(self, file_name, intr_file=None, cam_width=1280, cam_height=960):
+    #     r = pyrender.OffscreenRenderer(cam_width, cam_height)
+    #     for name, geom in self.scene.geometry.items():
+    #         print(isinstance(geom, trimesh.points.PointCloud))
+    #     # scene_color = pyrender.Scene.from_trimesh_scene(self.scene, \
+    #     #                    ambient_light=[.4, .4, .4], bg_color=[0., 0., 0.])
+    #     geometries = {}
+    #     for name, geom in self.scene.geometry.items():
+    #         if isinstance(geom, trimesh.base.Trimesh):
+    #             geometries[name]=pyrender.Mesh.from_trimesh(geom, smooth = False)
+    #         elif isinstance(geom, trimesh.points.PointCloud):
+    #             geometries[name]=pyrender.Mesh.from_points(geom.vertices, geom.colors[:,:3])
+
+    #     # create the pyrender scene object
+    #     scene_color = pyrender.scene.Scene(ambient_light=[.4, .4, .4], bg_color=[0., 0., 0.])
+
+    #     # add every node with geometry to the pyrender scene
+    #     i = 0
+    #     for node in self.scene.graph.nodes_geometry:
+    #         pose, geom_name = self.scene.graph[node]
+    #         if geom_name in geometries:
+    #             mesh_node = scene_color.add(geometries[geom_name], pose=pose)
+    #     # set observe pose
+    #     scene_color.set_pose(mesh_node, pose)
+
+    #     # set camera
+    #     if not intr_file:
+    #         intr_file = "dust3r/dust3r/default_synthetic_intr.txt"
+    #     cam_intrinsic = np.loadtxt(intr_file)
+    #     camera = pyrender.IntrinsicsCamera(fx = cam_intrinsic[0,0], fy=cam_intrinsic[1,1], cx=cam_intrinsic[0,2], cy=cam_intrinsic[1,2])
+    #     x_flip = R.from_euler("xyz", np.array([np.pi, 0, 0])).as_matrix()
+    #     y_flip = R.from_euler("xyz", np.array([0, 0, np.pi])).as_matrix()
+    #     z_flip = R.from_euler("xyz", np.array([0, np.pi, 0])).as_matrix()
+    #     cam_pose = np.eye(4)
+    #     cam_pose[:3,:3] = x_flip @ cam_pose[:3,:3]
+    #     scene_color.add(camera, pose=cam_pose)
+
+    #     # set light
+    #     light = pyrender.DirectionalLight(color=[1,1,1], intensity=2e3)
+    #     light_pose = np.eye(4)
+    #     # light_pose[:3,:3] = z_flip @ light_pose[:3,:3]
+    #     scene_color.add(light, light_pose)
+
+    #     #render
+    #     color, depth = r.render(scene_color)
+    #     im = PIL.Image.fromarray(color)
+    #     im.save("test.jpeg")
+
+    # def web_show(self):
+    #     import visdom
+    #     import trimesh
+    #     import numpy as np
+
+    #     # Example Trimesh object (replace with your actual data loading)
+    #     for name, geom in self.scene.geometry.items():
+    #         vertices = geom.vertices
+    #         # faces = geom.faces
+
+    #         # Flatten vertices array for visdom scatterplot
+    #         vertices_flat = vertices.reshape(-1, 3)
+
+    #         # Initialize Visdom server (make sure it's running)
+    #         vis = visdom.Visdom()
+
+    #         # Create scatterplot visualization in Visdom
+    #         vis.scatter(
+    #             X=vertices_flat,
+    #         )
 
 
 def show_raw_pointcloud_with_cams(imgs, pts3d, mask, focals, cams2world,

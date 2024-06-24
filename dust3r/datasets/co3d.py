@@ -147,5 +147,7 @@ if __name__ == "__main__":
                            color=(idx*255, (1 - idx)*255, 0),
                            image=colors,
                            cam_size=cam_size)
-        # viz.show()
-        viz.rend(view_name(views[0]))
+        viz.show()
+        # # viz.rend(file_name='test.png')
+        # viz.web_show()
+        # break
