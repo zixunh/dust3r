@@ -16,7 +16,7 @@ import numpy as np
 
 if __name__ == "__main__":
     import sys
-    sys.path.append('/Users/zixunhuang/Documents/sema-corr/dust3r')
+    sys.path.append('/home/msc_lab/zxh/sema-corr/dust3r')
 
 from dust3r.datasets.base.base_stereo_view_dataset import BaseStereoViewDataset
 from dust3r.utils.image import imread_cv2

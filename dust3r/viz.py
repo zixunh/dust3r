@@ -18,13 +18,13 @@ try:
 except ImportError:
     print('/!\\ module trimesh is not installed, cannot visualize results /!\\')
 
-import os
-import platform
-# import pyrender
-from scipy.spatial.transform import Rotation as R
+# import os
+# import platform
+# # import pyrender
+# from scipy.spatial.transform import Rotation as R
 
-if platform.system() == "Linux":
-    os.environ['PYOPENGL_PLATFORM'] = 'egl'
+# if platform.system() == "Linux":
+#     os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 def cat_3d(vecs):
     if isinstance(vecs, (np.ndarray, torch.Tensor)):
